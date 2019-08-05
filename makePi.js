@@ -23,10 +23,12 @@ function makeJSONPi () {
 function makeSQLPi () {
     const decArr = makePi()
 
+    const values = decArr.map( (n, i) => (`(${ i + 1 }, ${n})`))
+
     let sql = 
 `DROP TABLE IF EXISTS pi;
 CREATE TABLE pi (id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, n TINYINT(1) UNSIGNED NOT NULL);
-INSERT INTO pi (n) VALUES (${decArr.join(',')});
+INSERT INTO pi (id, n) VALUES ${values.join(', ')};
 `
 
     console.log(sql);
