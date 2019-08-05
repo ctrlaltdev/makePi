@@ -10,5 +10,7 @@ A Pi API: https://pi.ctrlalt.dev/
 | --- | --- |
 | `/` | Pi with 100 decimals |
 | `/<n>` | Pi with n decimals |
+| `/decimals/` | Pi 100 first decimals |
+| `/decimals/<n>` | P n first decimals |
 
 All endpoints returns json  

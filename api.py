@@ -7,10 +7,10 @@ from pidigits import piGenerator
 
 app = Flask(__name__)
 
-def getPiDecimals(length = 100):
+def getPiDecimals(length = 100, onlyDecimals = False):
     piGen = piGenerator()
     next(piGen)
-    piDec = '3.'
+    piDec = '' if onlyDecimals else '3.'
 
     for i in range(length):
         piDec += str(next(piGen))
@@ -21,6 +21,20 @@ def createRes(content, status = 200):
     headers = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json; charset=utf-8' }
     res = Response(response=json.dumps(content), status=status, headers=headers)
     return res
+
+@app.route('/decimals/<length>')
+def getPiDecN(length):
+    try:
+        decimals = int(length)
+        if (decimals > 10000):
+            return createRes({ 'error': 'Awww, come on, that\'s too many decimals for a little server' }, 400)
+        return createRes({ 'decimals': getPiDecimals(int(length), True) })
+    except ValueError:
+        return createRes({ 'error': 'The number of decimals should be an int, DUH.' }, 400)
+
+@app.route('/decimals/')
+def getPiDec():
+    return createRes({ 'decimals': getPiDecimals(100, True) })
 
 @app.route('/<length>')
 def getPiN(length):
