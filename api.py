@@ -1,19 +1,30 @@
 #!/bin/env python3
 
-from flask import Flask
-from flask import Response
-from flask import json
-from pidigits import piGenerator
+import os
+from flask import Flask, Response, json
+from playhouse.db_url import connect
+from peewee import MySQLDatabase, IntegerField, SmallIntegerField, Model
 
 app = Flask(__name__)
 
+db = connect(os.environ.get('DATABASE_URL'))
+
+class Pi(Model):
+    id = IntegerField()
+    n = SmallIntegerField()
+    class Meta:
+        database = db
+
 def getPiDecimals(length = 100, onlyDecimals = False):
-    piGen = piGenerator()
-    next(piGen)
+    db.connect()
+    getDecimals = Pi.select().limit(length)
+
     piDec = '' if onlyDecimals else '3.'
 
-    for i in range(length):
-        piDec += str(next(piGen))
+    for d in getDecimals:
+        piDec += str(d.n)
+
+    db.close()
 
     return piDec
 
@@ -26,7 +37,7 @@ def createRes(content, status = 200):
 def getPiDecN(length):
     try:
         decimals = int(length)
-        if (decimals > 10000):
+        if (decimals > 100000):
             return createRes({ 'error': 'Awww, come on, that\'s too many decimals for a little server' }, 400)
         return createRes({ 'decimals': getPiDecimals(int(length), True) })
     except ValueError:
@@ -40,7 +51,7 @@ def getPiDec():
 def getPiN(length):
     try:
         decimals = int(length)
-        if (decimals > 10000):
+        if (decimals > 100000):
             return createRes({ 'error': 'Awww, come on, that\'s too many decimals for a little server' }, 400)
         return createRes({ 'pi': getPiDecimals(int(length)) })
     except ValueError:
