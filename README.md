@@ -6,11 +6,11 @@ A Pi API: https://pi.ctrlalt.dev/
 
 ## Endpoints:
 ### GET
-| Path | Returns |
-| --- | --- |
-| `/` | Pi with 100 decimals |
-| `/<n>` | Pi with n decimals |
-| `/decimals/` | Pi 100 first decimals |
-| `/decimals/<n>` | P n first decimals |
+| Path | Returns | curl |
+| --- | --- | --- |
+| `/` | Pi with 100 decimals | `curl https://pi.ctrlalt.dev/` |
+| `/<n>` | Pi with n decimals | `curl https://pi.ctrlalt.dev/10` |
+| `/decimals/` | Pi 100 first decimals | `curl https://pi.ctrlalt.dev/decimals/` |
+| `/decimals/<n>` | P n first decimals | `curl https://pi.ctrlalt.dev/decimals/10` |
 
-All endpoints returns json  
+All endpoints return json  

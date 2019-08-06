@@ -1,4 +1,6 @@
 venv
 *.pyc
 .env
-makePi/*
+makePi/
+.vscode/
+
