@@ -11,6 +11,8 @@ A Pi API: https://pi.ctrlalt.dev/
 | `/` | Pi with 100 decimals | `curl https://pi.ctrlalt.dev/` |
 | `/<n>` | Pi with n decimals | `curl https://pi.ctrlalt.dev/10` |
 | `/decimals/` | Pi 100 first decimals | `curl https://pi.ctrlalt.dev/decimals/` |
-| `/decimals/<n>` | P n first decimals | `curl https://pi.ctrlalt.dev/decimals/10` |
+| `/decimals/<n>` | Pi n first decimals | `curl https://pi.ctrlalt.dev/decimals/10` |
+| `/stream` | Stream of Pi decimals with a 500ms delay | `curl https://pi.ctrlalt.dev/stream` |
+| `/stream/<t>` | Stream of Pi decimals with a t ms delay | `curl https://pi.ctrlalt.dev/stream/1000` |
 
-All endpoints return json  
+All endpoints but `stream` return json  
