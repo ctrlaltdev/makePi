@@ -1,0 +1,189 @@
+openapi: 3.0.0
+info:
+  description: "Pi API"
+  version: "1.0.0"
+  title: "Pi"
+  license:
+    name: "MPL-2.0"
+    url: "https://github.com/ctrlaltdev/makePi/blob/master/LICENSE"
+servers:
+  - url: "https://pi.ctrlalt.dev"
+paths:
+  /:
+    get:
+      summary: "Pi with 100 decimals"
+      description: ""
+      operationId: "getPi"
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pi"
+  /{n}:
+    get:
+      summary: "Pi with n decimals"
+      description: ""
+      operationId: "getPiN"
+      parameters:
+      - name: "n"
+        in: "path"
+        description: "Number of decimals you want back"
+        required: true
+        schema:
+          type: "integer"
+          maximum: 100000
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pi"
+              examples:
+                10:
+                  value:
+                    pi: "3.1415926535"
+        400:
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                ErrorInt:
+                  $ref: '#/components/examples/ErrorInt'
+                ErrorVal:
+                  $ref: '#/components/examples/ErrorVal'
+  /decimals:
+    get:
+      summary: "Pi 100 first decimals"
+      description: ""
+      operationId: "getPiDec"
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Decimals"
+  /decimals/{n}:
+    get:
+      summary: "Pi n first decimals"
+      description: ""
+      operationId: "getPiDecN"
+      parameters:
+      - in: "path"
+        name: "n"
+        description: "Number of decimals you want back"
+        required: true
+        schema:
+          type: "integer"
+          maximum: 100000
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Decimals"
+              examples:
+                10:
+                  value:
+                    pi: "3.1415926535"
+        400:
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                ErrorInt:
+                  $ref: '#/components/examples/ErrorInt'
+                ErrorVal:
+                  $ref: '#/components/examples/ErrorVal'
+  /stream:
+    get:
+      summary: "Stream of Pi decimals, sent every 500 ms"
+      description: ""
+      operationId: "streamPi"
+      responses:
+        200:
+          description: "OK"
+          content:
+            text/event-stream:
+              schema:
+                $ref: "#/components/schemas/Stream"
+  /stream/{delay}:
+    get:
+      summary: "Pi n first decimals"
+      description: ""
+      operationId: "streamTimedPi"
+      parameters:
+      - name: "delay"
+        in: "path"
+        description: "Stream of Pi decimals, with a custom delay in ms"
+        required: true
+        schema:
+          type: "integer"
+          minimum: 200
+      responses:
+        200:
+          description: "OK"
+          content:
+            text/event-stream:
+              schema:
+                $ref: "#/components/schemas/Stream"
+        400:
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                ErrorDelayInt:
+                  $ref: '#/components/examples/ErrorDelayInt'
+                ErrorDelayVal:
+                  $ref: '#/components/examples/ErrorDelayVal'
+components:
+  schemas:
+    Pi:
+      type: "object"
+      properties:
+        pi:
+          type: "string"
+      example:
+        pi: "3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679"
+    Decimals:
+      type: "object"
+      properties:
+        decimals:
+          type: "string"
+      example:
+        decimals: "1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679"
+    Stream:
+      type: "string"
+      example: "data: 1\n\ndata: 4\n\ndata: 1\n\ndata: 5\n\ndata: 9\n\n"
+    Error:
+      type: "object"
+      properties:
+        error:
+          type: "string"
+  examples:
+    ErrorInt:
+      value:
+        error: "The number of decimals should be an int, DUH."
+    ErrorVal:
+      value:
+        error: "Awww, come on, that's too many decimals for a little server"
+    ErrorDelayInt:
+      value:
+        error: "The delay should be an int in milliseconds"
+    ErrorDelayVal:
+      value:
+        error: "Have pity on a small server, increase your delay"
+          
+externalDocs:
+  description: "Find out more about a Pi API"
+  url: "https://ctrlalt.dev/makePi"
